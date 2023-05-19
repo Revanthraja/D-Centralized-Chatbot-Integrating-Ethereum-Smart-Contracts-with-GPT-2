@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chatbot Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      #chat-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        height: 300px;
+        overflow-y: scroll;
+      }
+
+      #chat-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #chat-input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+      }
+
+      #chat-form input[type="submit"] {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      #chat-form input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>D-Centralized Chatbot: Integrating Ethereum Smart Contracts with GPT-2</h1>
+    <div id="chat-container"></div>
+    <form id="chat-form">
+      <input type="text" id="chat-input">
+      <input type="submit" value="Send">
+    </form>
+
+    <script>
+      var chatContainer = document.getElementById('chat-container');
+      var chatForm = document.getElementById('chat-form');
+      var chatInput = document.getElementById('chat-input');
+
+      chatForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        sendMessage();
+      });
+
+      function sendMessage() {
+        var message = chatInput.value;
+        chatInput.value = '';
+        addMessage('User', message);
+        fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ content: message })
+        })
+        .then(response => response.json())
+        .then(data => addMessage('Chatbot', data.response));
+      }
+
+      function addMessage(sender, message) {
+        var messageDiv = document.createElement('div');
+        messageDiv.textContent = sender + ': ' + message;
+        chatContainer.appendChild(messageDiv);
+      }
+    </script>
+  </body>
+</html>
